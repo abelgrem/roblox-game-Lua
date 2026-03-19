@@ -1,2 +1,2 @@
-# roblox-game-Lua
-un petit jeu crée en solo pour passer le temp :)
+un petit aperçut de mon travail de devellopement en Lua sur Roblox Studio en 2025/2026
+-creation d'un jeu jouable avec des interfaces fonctionnelles , un systeme de vague des ennemies et leurs IA , un systeme de shop pour ameliorer les stats et de nombreuses autres fitures ...
