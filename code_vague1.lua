@@ -6,7 +6,6 @@ local Players = game:GetService("Players")
 local Debris = game:GetService("Debris")
 local TweenService = game:GetService("TweenService")
 
--- 🔴 Désactiver le script et ShootHandler si le joueur meurt
 local function disableOnPlayerDeath()
 	for _, player in ipairs(Players:GetPlayers()) do
 		if player.Character then
@@ -29,7 +28,6 @@ local function disableOnPlayerDeath()
 end
 disableOnPlayerDeath()
 
--- Fonction pour activer un ennemi
 local function unlockEnemy(enemy)
 	for _, part in ipairs(enemy:GetDescendants()) do
 		if part.Name == "Sword" and part:IsA("Part") then
@@ -54,12 +52,10 @@ local function unlockEnemy(enemy)
 	if swordScript then swordScript.Disabled = false end
 end
 
--- Afficher du texte à l'écran du joueur (VERSION AMÉLIORÉE)
 local function showWaveText(player, waveNumber, isComplete)
 	local playerGui = player:FindFirstChild("PlayerGui")
 	if not playerGui then return end
 
-	-- Supprimer les anciens WaveTextGui
 	for _, gui in ipairs(playerGui:GetChildren()) do
 		if gui.Name == "WaveTextGui" then
 			gui:Destroy()
@@ -71,7 +67,6 @@ local function showWaveText(player, waveNumber, isComplete)
 	screenGui.Name = "WaveTextGui"
 	screenGui.Parent = playerGui
 
-	-- Conteneur principal
 	local container = Instance.new("Frame")
 	container.Size = UDim2.new(0, 500, 0, 150)
 	container.Position = UDim2.new(0.5, 0, 0.3, 0)
@@ -94,7 +89,6 @@ local function showWaveText(player, waveNumber, isComplete)
 	containerGradient.Rotation = 90
 	containerGradient.Parent = container
 
-	-- Bordure lumineuse
 	local containerStroke = Instance.new("UIStroke")
 	if isComplete then
 		containerStroke.Color = Color3.fromRGB(100, 255, 100)
@@ -105,7 +99,6 @@ local function showWaveText(player, waveNumber, isComplete)
 	containerStroke.Transparency = 0.3
 	containerStroke.Parent = container
 
-	-- Barre décorative en haut
 	local topBar = Instance.new("Frame")
 	topBar.Size = UDim2.new(1, 0, 0, 6)
 	topBar.Position = UDim2.new(0, 0, 0, 0)
@@ -147,7 +140,6 @@ local function showWaveText(player, waveNumber, isComplete)
 	iconSymbol.Text = isComplete and "✓" or "⚔"
 	iconSymbol.Parent = icon
 
-	-- Texte principal
 	local mainText = Instance.new("TextLabel")
 	mainText.Size = UDim2.new(1, -40, 0, 50)
 	mainText.Position = UDim2.new(0, 20, 0, 90)
@@ -159,14 +151,12 @@ local function showWaveText(player, waveNumber, isComplete)
 	mainText.TextXAlignment = Enum.TextXAlignment.Center
 	mainText.Parent = container
 
-	-- Effet de brillance sur le texte
 	local textStroke = Instance.new("UIStroke")
 	textStroke.Color = isComplete and Color3.fromRGB(100, 255, 100) or Color3.fromRGB(255, 100, 100)
 	textStroke.Thickness = 1
 	textStroke.Transparency = 0.5
 	textStroke.Parent = mainText
 
-	-- Sous-texte
 	if not isComplete then
 		local subText = Instance.new("TextLabel")
 		subText.Size = UDim2.new(1, -40, 0, 20)
@@ -180,7 +170,6 @@ local function showWaveText(player, waveNumber, isComplete)
 		subText.Parent = container
 	end
 
-	-- Animation d'apparition
 	container.Size = UDim2.new(0, 0, 0, 0)
 	container.Rotation = -10
 
@@ -190,8 +179,7 @@ local function showWaveText(player, waveNumber, isComplete)
 		{Size = UDim2.new(0, 500, 0, 150), Rotation = 0}
 	)
 	appearTween:Play()
-
-	-- Animation de pulsation de l'icône (réduite à 2 cycles)
+	
 	local iconAnimRunning = true
 	task.spawn(function()
 		for i = 1, 2 do
@@ -212,7 +200,6 @@ local function showWaveText(player, waveNumber, isComplete)
 		end
 	end)
 
-	-- Animation de pulsation de la bordure (réduite à 2 cycles)
 	local strokeAnimRunning = true
 	task.spawn(function()
 		for i = 1, 2 do
@@ -233,7 +220,7 @@ local function showWaveText(player, waveNumber, isComplete)
 		end
 	end)
 
-	-- Animation de disparition après 1 seconde
+
 	task.delay(1, function()
 		iconAnimRunning = false
 		strokeAnimRunning = false
@@ -257,10 +244,10 @@ end
 
 wait(WaveDelay)
 
--- 🔴 Récupérer le nouveau dossier ENEMY
+
 local EnemyFolder = workspace:WaitForChild("ENEMY")
 
--- Débloquer les ennemis
+
 local activeEnemies = {}
 for _, name in ipairs(EnemyNames) do
 	local enemy = EnemyFolder:FindFirstChild(name)
@@ -270,15 +257,13 @@ for _, name in ipairs(EnemyNames) do
 	end
 end
 
--- Afficher "Vague 1"
+
 for _, player in ipairs(Players:GetPlayers()) do
 	showWaveText(player, 1, false)
 end
 
--- Activer le tir
 ShootHandler.Disabled = false
 
--- BOUCLE DE FIN DE VAGUE
 local function isWaveOver()
 	for _, enemy in ipairs(activeEnemies) do
 		if enemy and enemy:FindFirstChild("Humanoid") and enemy.Humanoid.Health > 0 then
@@ -292,18 +277,16 @@ while not isWaveOver() do
 	wait(0.2)
 end
 
--- Vague terminée
 for _, player in ipairs(Players:GetPlayers()) do
 	showWaveText(player, 1, true)
 end
 
--- Attendre que l'animation se termine avant de passer à la wave 2
 wait(1.5)
 
--- Déclencher WAVE2
+
 if wave2Script then
 	wave2Script.Disabled = false
 end
 
--- Désactiver Vague1
+
 script.Disabled = true
